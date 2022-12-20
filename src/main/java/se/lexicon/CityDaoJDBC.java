@@ -139,11 +139,20 @@ public class CityDaoJDBC implements CityDao {
     }
 
     public City update(City city) {
-        String query = "select * from city";
+        String query = "update city set Name = ?, CountryCode = ?, District = ?, Population = ? Where id = ?";
         int cityId = city.getId();
+
         try (Connection connection = MySqlConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
-             ResultSet resultSet = preparedStatement.executeQuery();) {
+            ) {
+
+            preparedStatement.setString(1, city.getName());
+            preparedStatement.setString(2, city.getCountryCode());
+            preparedStatement.setString(3, city.getDistrict());
+            preparedStatement.setInt(4, city.getPopulation());
+            preparedStatement.setInt(5,cityId);
+
+
 
         } catch (DBConnectionException | SQLException e) {
             System.out.println(e.getMessage());
